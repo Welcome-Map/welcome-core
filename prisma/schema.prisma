@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AccountVerification {
+  id                  String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createDateTime      DateTime @default(now()) @db.Timestamptz(6)
+  lastChangedDateTime DateTime @default(now()) @db.Timestamptz(6)
+  code                String   @unique @db.VarChar
+  userId              String?  @unique @db.Uuid
+  user                User?    @relation(fields: [userId], references: [id])
+
+  @@index([code], name: "account_verification_idx_code")
+}
+
+model PasswordReset {
+  id                  String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createDateTime      DateTime @default(now()) @db.Timestamptz(6)
+  lastChangedDateTime DateTime @default(now()) @db.Timestamptz(6)
+  code                String   @unique @db.VarChar
+  userId              String?  @unique @db.Uuid
+  user                User?    @relation(fields: [userId], references: [id])
+
+  @@index([code], name: "password_reset_idx_code")
+}
+
+model User {
+  id                   String               @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createDateTime       DateTime             @default(now()) @db.Timestamptz(6)
+  lastChangedDateTime  DateTime             @default(now()) @db.Timestamptz(6)
+  username             String               @db.VarChar
+  email                String               @db.VarChar
+  passwordHash         String               @db.VarChar
+  verified             Boolean              @default(false)
+  account_verification AccountVerification?
+  password_reset       PasswordReset?
+
+  @@unique([username, email], name: "user_unique_idx_username_email")
+  @@index([username], name: "user_idx_username")
+  @@index([email], name: "user_idx_email")
+}
