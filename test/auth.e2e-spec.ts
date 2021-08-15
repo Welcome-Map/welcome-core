@@ -11,7 +11,6 @@ import { UsersService } from '../src/users/users.service';
 import { BullModule } from '@nestjs/bull';
 import { MailService } from '../src/mail/mail.service';
 import { MailServiceMock } from './mocks/mail.service.mock';
-import { TopicsModule } from '../src/topics/topics.module';
 import { PrismaService } from '../src/prisma.service';
 
 describe('AuthController (e2e)', () => {
@@ -24,7 +23,6 @@ describe('AuthController (e2e)', () => {
       imports: [
         AuthModule,
         UsersModule,
-        TopicsModule,
         PrismaService,
         BullModule.forRoot({
           redis: {

@@ -96,6 +96,12 @@ export class AuthService {
         user: { connect: { id: user.id } },
       },
     });
+
+    await this.mailService.sendPAsswordResetMail({
+      email,
+      username: user.username,
+      verificationCode: code,
+    });
   }
 
   async updatePassword({ code, password }: UpdatepasswordDto) {
