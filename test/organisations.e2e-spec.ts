@@ -6,7 +6,7 @@ import { UsersModule } from '../src/users/users.module';
 import { BullModule } from '@nestjs/bull';
 import { MailService } from '../src/mail/mail.service';
 import { MailServiceMock } from './mocks/mail.service.mock';
-import { OrganisationsModule } from '../dist/organisations/organisations.module';
+import { OrganisationsModule } from '../src/organisations/organisations.module';
 import { RegisterDTO } from '../src/auth/dto/register.dto';
 import { internet, company } from 'faker';
 import * as request from 'supertest';
