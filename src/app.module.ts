@@ -8,6 +8,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { createFakeMailer } from './utils/createFakeMailer';
 import { MailModule } from './mail/mail.module';
 import { PrismaService } from './prisma.service';
+import { OrganisationsModule } from './organisations/organisations.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { PrismaService } from './prisma.service';
     UsersModule,
     AuthModule,
     MailModule,
+    OrganisationsModule,
   ],
   controllers: [],
   providers: [PrismaService],

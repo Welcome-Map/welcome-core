@@ -33,14 +33,45 @@ model User {
   id                   String               @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createDateTime       DateTime             @default(now()) @db.Timestamptz(6)
   lastChangedDateTime  DateTime             @default(now()) @db.Timestamptz(6)
-  username             String               @db.VarChar
-  email                String               @db.VarChar
+  username             String               @unique @db.VarChar
+  email                String               @unique @db.VarChar
   passwordHash         String               @db.VarChar
   verified             Boolean              @default(false)
   account_verification AccountVerification?
   password_reset       PasswordReset?
+  orgsMemberships      OrgsMemberships[]
 
   @@unique([username, email], name: "user_unique_idx_username_email")
   @@index([username], name: "user_idx_username")
   @@index([email], name: "user_idx_email")
+}
+
+model Organisation {
+  id                  String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createDateTime      DateTime          @default(now()) @db.Timestamptz(6)
+  lastChangedDateTime DateTime          @default(now()) @db.Timestamptz(6)
+  name                String            @unique @db.VarChar(200)
+  description         String?            @db.VarChar
+  logo                String?            @db.VarChar
+  website             String?            @db.VarChar
+  orgsMemberships     OrgsMemberships[]
+}
+
+model OrgsMemberships {
+  id                  String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createDateTime      DateTime     @default(now()) @db.Timestamptz(6)
+  lastChangedDateTime DateTime     @default(now()) @db.Timestamptz(6)
+  role                Role         @default(USER)
+  user                User         @relation(fields: [userId], references: [id])
+  userId              String       @db.Uuid
+  organisation        Organisation @relation(fields: [organisationId], references: [id])
+  organisationId      String       @db.Uuid
+
+  @@unique([userId, organisationId], name: "orgsmemberships_unique_idx_userid_organisationid")
+}
+
+enum Role {
+  USER
+  MANAGER
+  ADMIN
 }

@@ -195,7 +195,6 @@ describe('AuthController (e2e)', () => {
     });
 
     const newPassword = '123456abc';
-
     await request(app.getHttpServer())
       .post('/auth/password/')
       .send({ password: newPassword, code: '1234' })
