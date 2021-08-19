@@ -77,5 +77,21 @@ describe('Organisations (e2e)', () => {
     expect(orgsRes.body.length).toEqual(10);
   });
 
-  // it('can list all org with pagination', async () => {});
+  it('can list all org with pagination', async () => {
+    const { token } = await createUser(app);
+
+    for (let i = 0; i <= 60; i++) {
+      await request(app.getHttpServer())
+        .post('/organisations')
+        .send({ name: company.companyName() })
+        .set('Authorization', `Bearer ${token}`)
+        .expect(201);
+    }
+
+    const orgsRes = await request(app.getHttpServer())
+      .get('/organisations?take=20&skip=10')
+      .expect(200);
+
+    expect(orgsRes.body.length).toEqual(20);
+  });
 });
