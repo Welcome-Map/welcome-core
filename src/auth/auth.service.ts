@@ -111,7 +111,9 @@ export class AuthService {
         user: true,
       },
     });
-
+    if (!resetPassword) {
+      return;
+    }
     const passwordHash = await hash(password, 10);
 
     await this.usersService.update({

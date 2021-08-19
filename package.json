@@ -23,8 +23,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "NODE_ENV=test jest --config ./test/jest-e2e.json",
-    "pretest:e2e": "docker-compose up -d && dotenv -e .e2e.env -- prisma generate && dotenv -e .e2e.env -- prisma migrate reset -f",
+    "test:e2e": "NODE_ENV=test ./node_modules/.bin/dotenv -e .e2e.env -- jest --config ./test/jest-e2e.json",
+    "pretest:e2e": "docker-compose up -d && ./node_modules/.bin/dotenv -e .e2e.env -- prisma generate && ./node_modules/.bin/dotenv -e .e2e.env -- prisma migrate reset -f",
     "posttest:e2e": "docker-compose stop && docker-compose rm -f test-db && docker-compose rm -f test-redis",
     "copy:emails": "cpx 'src/mail/templates/**' 'dist/src/mail/templates/'"
   },

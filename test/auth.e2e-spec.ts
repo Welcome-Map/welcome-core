@@ -180,7 +180,7 @@ describe('AuthController (e2e)', () => {
       password: internet.password(),
     };
 
-    const userRes = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .post('/auth/signup')
       .send(userPayload)
       .expect(201);
@@ -190,14 +190,11 @@ describe('AuthController (e2e)', () => {
       .send({ email: userPayload.email })
       .expect(201);
 
-    const { code } = await prisma.passwordReset.findFirst({
-      where: { user: { id: userRes.body.userId } },
-    });
-
     const newPassword = '123456abc';
-    await request(app.getHttpServer())
+    const res = await request(app.getHttpServer())
       .post('/auth/password/')
       .send({ password: newPassword, code: '1234' })
-      .expect(500);
+      .expect(201);
+    expect(res.body).toStrictEqual({});
   });
 });

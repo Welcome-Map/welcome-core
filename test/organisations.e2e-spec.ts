@@ -7,14 +7,14 @@ import { BullModule } from '@nestjs/bull';
 import { MailService } from '../src/mail/mail.service';
 import { MailServiceMock } from './mocks/mail.service.mock';
 import { OrganisationsModule } from '../src/organisations/organisations.module';
-import { RegisterDTO } from '../src/auth/dto/register.dto';
-import { internet, company } from 'faker';
+import { company } from 'faker';
 import * as request from 'supertest';
+import { createUser } from './helpers/createUser';
 
 describe('Organisations (e2e)', () => {
   let app: INestApplication;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         AuthModule,
@@ -40,30 +40,13 @@ describe('Organisations (e2e)', () => {
   });
 
   it('post / with a registered user', async () => {
-    const userPayload: RegisterDTO = {
-      email: internet.email(),
-      username: internet.userName(),
-      password: internet.password(),
-    };
-
     const orgName = company.companyName();
-    await request(app.getHttpServer())
-      .post('/auth/signup')
-      .send(userPayload)
-      .expect(201);
-
-    const userRes = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send({
-        username: userPayload.username,
-        password: userPayload.password,
-      })
-      .expect(201);
+    const { token } = await createUser(app);
 
     const res = await request(app.getHttpServer())
       .post('/organisations')
       .send({ name: orgName })
-      .set('Authorization', `Bearer ${userRes.body.access_token}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(201);
 
     expect(res.body.name).toEqual(orgName);
@@ -77,30 +60,13 @@ describe('Organisations (e2e)', () => {
   });
 
   it('can list all orgs', async () => {
-    const userPayload: RegisterDTO = {
-      email: internet.email(),
-      username: internet.userName(),
-      password: internet.password(),
-    };
-
-    await request(app.getHttpServer())
-      .post('/auth/signup')
-      .send(userPayload)
-      .expect(201);
-
-    const userRes = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send({
-        username: userPayload.username,
-        password: userPayload.password,
-      })
-      .expect(201);
+    const { token } = await createUser(app);
 
     for (let i = 0; i <= 30; i++) {
       await request(app.getHttpServer())
         .post('/organisations')
         .send({ name: company.companyName() })
-        .set('Authorization', `Bearer ${userRes.body.access_token}`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(201);
     }
 
@@ -110,4 +76,6 @@ describe('Organisations (e2e)', () => {
 
     expect(orgsRes.body.length).toEqual(10);
   });
+
+  // it('can list all org with pagination', async () => {});
 });
