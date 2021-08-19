@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install modules
-        run: npm i
+        run: npm i --legacy-peer-deps
       - name: Run tests
         run: npm run test:e2e
 #  buildpushdocker:
