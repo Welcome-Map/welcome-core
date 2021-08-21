@@ -9,6 +9,7 @@ import { createFakeMailer } from './utils/createFakeMailer';
 import { MailModule } from './mail/mail.module';
 import { PrismaService } from './prisma.service';
 import { OrganisationsModule } from './organisations/organisations.module';
+import { CaslModule } from './casl/casl.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { OrganisationsModule } from './organisations/organisations.module';
     AuthModule,
     MailModule,
     OrganisationsModule,
+    CaslModule,
   ],
   controllers: [],
   providers: [PrismaService],

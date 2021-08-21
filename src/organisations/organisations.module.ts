@@ -9,9 +9,10 @@ import { OrganisationsController } from './organisations.controller';
 import { PrismaService } from '../prisma.service';
 import { UsersModule } from '../users/users.module';
 import { PagerMiddleware } from '../middlewares/pager.middleware';
+import { CaslModule } from '../casl/casl.module';
 
 @Module({
-  imports: [UsersModule],
+  imports: [UsersModule, CaslModule],
   providers: [OrganisationsService, PrismaService],
   controllers: [OrganisationsController],
 })

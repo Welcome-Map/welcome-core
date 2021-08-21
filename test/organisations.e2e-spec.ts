@@ -7,14 +7,14 @@ import { BullModule } from '@nestjs/bull';
 import { MailService } from '../src/mail/mail.service';
 import { MailServiceMock } from './mocks/mail.service.mock';
 import { OrganisationsModule } from '../src/organisations/organisations.module';
-import { company } from 'faker';
 import * as request from 'supertest';
 import { createUser } from './helpers/createUser';
+import { nanoid } from 'nanoid';
 
 describe('Organisations (e2e)', () => {
   let app: INestApplication;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         AuthModule,
@@ -38,9 +38,12 @@ describe('Organisations (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
   });
+  afterEach(async () => {
+    app.close();
+  });
 
   it('post / with a registered user', async () => {
-    const orgName = company.companyName();
+    const orgName = nanoid();
     const { token } = await createUser(app);
 
     const res = await request(app.getHttpServer())
@@ -65,7 +68,7 @@ describe('Organisations (e2e)', () => {
     for (let i = 0; i <= 30; i++) {
       await request(app.getHttpServer())
         .post('/organisations')
-        .send({ name: company.companyName() })
+        .send({ name: nanoid() })
         .set('Authorization', `Bearer ${token}`)
         .expect(201);
     }
@@ -83,7 +86,7 @@ describe('Organisations (e2e)', () => {
     for (let i = 0; i <= 60; i++) {
       await request(app.getHttpServer())
         .post('/organisations')
-        .send({ name: company.companyName() })
+        .send({ name: nanoid() })
         .set('Authorization', `Bearer ${token}`)
         .expect(201);
     }
@@ -93,5 +96,47 @@ describe('Organisations (e2e)', () => {
       .expect(200);
 
     expect(orgsRes.body.length).toEqual(20);
+  });
+
+  it('can edit org if creator', async () => {
+    const { token } = await createUser(app);
+
+    const res = await request(app.getHttpServer())
+      .post('/organisations')
+      .send({ name: nanoid() })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(201);
+
+    const org = res.body;
+    const newOrgName = nanoid();
+
+    const modifiedOrg = await request(app.getHttpServer())
+      .put(`/organisations/${org.id}`)
+      .send({ name: newOrgName })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(modifiedOrg.body.name).toEqual(newOrgName);
+  });
+
+  it('cannot edit org if not admin', async () => {
+    const { token } = await createUser(app);
+
+    const res = await request(app.getHttpServer())
+      .post('/organisations')
+      .send({ name: nanoid() })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(201);
+
+    const org = res.body;
+    const newOrgName = nanoid();
+
+    const { token: tokenNotAdmin } = await createUser(app);
+
+    await request(app.getHttpServer())
+      .put(`/organisations/${org.id}`)
+      .send({ name: newOrgName })
+      .set('Authorization', `Bearer ${tokenNotAdmin}`)
+      .expect(403);
   });
 });

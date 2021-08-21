@@ -6,14 +6,22 @@ import {
   Request,
   Get,
   Query,
+  Put,
+  Param,
 } from '@nestjs/common';
 import { OrganisationsService } from './organisations.service';
 import { createOrganisationDTO } from './dto/createOrganisation.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { UpdateOrganisationDTO } from './dto/updateOrganisation.dto';
 
 @Controller('organisations')
 export class OrganisationsController {
   constructor(private organisationsService: OrganisationsService) {}
+
+  @Get()
+  async findAll(@Query() { take, skip }) {
+    return this.organisationsService.findAll(take, skip);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Post()
@@ -24,8 +32,17 @@ export class OrganisationsController {
     return this.organisationsService.create(createOrganisationParams, req.user);
   }
 
-  @Get()
-  async findAll(@Query() { take, skip }) {
-    return this.organisationsService.findAll(take, skip);
+  @UseGuards(JwtAuthGuard)
+  @Put(':id')
+  async update(
+    @Param('id') id: string,
+    @Request() req,
+    @Body() updateOrganisationsDTO: UpdateOrganisationDTO,
+  ) {
+    return this.organisationsService.update(
+      id,
+      req.user,
+      updateOrganisationsDTO,
+    );
   }
 }

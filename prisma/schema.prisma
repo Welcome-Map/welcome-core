@@ -37,6 +37,7 @@ model User {
   email                String               @unique @db.VarChar
   passwordHash         String               @db.VarChar
   verified             Boolean              @default(false)
+  admin                Boolean              @default(false)
   account_verification AccountVerification?
   password_reset       PasswordReset?
   orgsMemberships      OrgsMemberships[]
@@ -51,9 +52,9 @@ model Organisation {
   createDateTime      DateTime          @default(now()) @db.Timestamptz(6)
   lastChangedDateTime DateTime          @default(now()) @db.Timestamptz(6)
   name                String            @unique @db.VarChar(200)
-  description         String?            @db.VarChar
-  logo                String?            @db.VarChar
-  website             String?            @db.VarChar
+  description         String?           @db.VarChar
+  logo                String?           @db.VarChar
+  website             String?           @db.VarChar
   orgsMemberships     OrgsMemberships[]
 }
 
