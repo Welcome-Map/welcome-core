@@ -23,5 +23,5 @@ export const createUser = async (app: INestApplication) => {
     })
     .expect(201);
 
-  return { userPayload, token: user.body.access_token };
+  return { user, token: user.body.access_token };
 };

@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma.service';
 import { Organisation, Prisma } from '.prisma/client';
 import { User } from '@prisma/client';
 import { Role } from './entities/orgsmemberships.entity';
-import { CaslAbilityFactory } from '../casl/casl-ability.factory';
+import { CaslOrgsAbilityFactory } from '../casl/casl-orgs-ability.factory';
 import { UpdateOrganisationDTO } from './dto/updateOrganisation.dto';
 import { Action } from '../casl/types';
 
@@ -11,7 +11,7 @@ import { Action } from '../casl/types';
 export class OrganisationsService {
   constructor(
     private prisma: PrismaService,
-    private caslAbilityFactory: CaslAbilityFactory,
+    private caslAbilityFactory: CaslOrgsAbilityFactory,
   ) {}
 
   async findAll(take = 10, skip = 0) {
@@ -51,5 +51,14 @@ export class OrganisationsService {
     } else {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
+  }
+
+  async findOne(where: Prisma.OrganisationWhereUniqueInput) {
+    return this.prisma.user.findUnique({
+      where,
+      include: {
+        orgsMemberships: true,
+      },
+    });
   }
 }

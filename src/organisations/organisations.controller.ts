@@ -45,4 +45,9 @@ export class OrganisationsController {
       updateOrganisationsDTO,
     );
   }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.organisationsService.findOne({ id });
+  }
 }

@@ -29,9 +29,9 @@ type AppAbility = PrismaAbility<
 const AppAbility = PrismaAbility as AbilityClass<AppAbility>;
 
 @Injectable()
-export class CaslAbilityFactory {
+export class CaslOrgsAbilityFactory {
   constructor(private prisma: PrismaService) {}
-  async createForOrgs(user: User, organisationId) {
+  async createForOrgs(user: User, organisationId: string) {
     const dbUser = await this.prisma.user.findUnique({
       where: { id: user.id },
       include: {
@@ -51,6 +51,18 @@ export class CaslAbilityFactory {
     } else {
       cannot(Action.Update, 'Organisation');
       cannot(Action.Delete, 'Organisation');
+    }
+    if (
+      dbUser.orgsMemberships[0]?.role == Role.ADMIN ||
+      dbUser.orgsMemberships[0]?.role == Role.MANAGER
+    ) {
+      can(Action.Create, 'OrgsMemberships');
+      can(Action.Update, 'OrgsMemberships');
+      can(Action.Delete, 'OrgsMemberships');
+    } else {
+      cannot(Action.Create, 'OrgsMemberships');
+      cannot(Action.Update, 'OrgsMemberships');
+      cannot(Action.Delete, 'OrgsMemberships');
     }
 
     return build();

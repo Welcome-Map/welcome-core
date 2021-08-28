@@ -139,4 +139,33 @@ describe('Organisations (e2e)', () => {
       .set('Authorization', `Bearer ${tokenNotAdmin}`)
       .expect(403);
   });
+
+  it('can add a user to an org', async () => {
+    const { token } = await createUser(app);
+
+    const regularUser = await createUser(app);
+
+    const res = await request(app.getHttpServer())
+      .post('/organisations')
+      .send({ name: nanoid() })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(201);
+
+    const org = res.body;
+
+    await request(app.getHttpServer())
+      .post(`/organisations/${org.id}/join`)
+      .send({ userId: regularUser.user.body.id })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(201);
+
+    const orgRes = await request(app.getHttpServer())
+      .get(`/organisations/${org.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(orgRes.body.users[1].userName).toEqual(
+      regularUser.user.body.username,
+    );
+  });
 });
