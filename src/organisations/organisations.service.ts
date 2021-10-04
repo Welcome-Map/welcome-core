@@ -16,7 +16,7 @@ export class OrganisationsService {
     private orgsMembershipsRepository: OrgsMembershipsRepository,
   ) {}
 
-  async findAll(take = 10, skip = 0) {
+  async findAll(take = 50, skip = 0) {
     return this.organisationsRepository.findMany({
       take,
       skip,

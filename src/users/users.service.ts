@@ -13,8 +13,12 @@ export class UsersService {
   }
 
   async findAll(params?: { skip?: number; take?: number }): Promise<User[]> {
-    const { skip, take } = params;
-    return this.usersRepository.findAll({ skip, take });
+    if (params?.skip && params?.take) {
+      const { skip, take } = params;
+      return this.usersRepository.findAll({ skip, take });
+    } else {
+      return this.usersRepository.findAll();
+    }
   }
 
   async findOne(
