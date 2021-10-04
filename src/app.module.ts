@@ -22,10 +22,7 @@ import { CaslModule } from './casl/casl.module';
     }),
     MailerModule.forRootAsync({
       useFactory: async () => ({
-        transport:
-          process.env.NODE_ENV == 'production'
-            ? process.env.SMTP
-            : await createFakeMailer(),
+        transport: process.env.SMTP,
         defaults: {
           from: '"Woozir" <no-reply@woozir.app>',
         },

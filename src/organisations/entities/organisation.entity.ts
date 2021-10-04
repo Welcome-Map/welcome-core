@@ -1,4 +1,5 @@
 import { BaseEntity } from '../../common/base.entity';
+import { User } from '../../users/entities/user.entity';
 
 export class Organisation extends BaseEntity {
   constructor(partial: Partial<Organisation>) {
@@ -13,4 +14,6 @@ export class Organisation extends BaseEntity {
   logo?: string;
 
   website?: string;
+
+  users?: User[];
 }

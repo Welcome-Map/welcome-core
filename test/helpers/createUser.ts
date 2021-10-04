@@ -10,12 +10,12 @@ export const createUser = async (app: INestApplication) => {
     password: internet.password(),
   };
 
-  await request(app.getHttpServer())
+  const user = await request(app.getHttpServer())
     .post('/auth/signup')
     .send(userPayload)
     .expect(201);
 
-  const user = await request(app.getHttpServer())
+  const userRes = await request(app.getHttpServer())
     .post('/auth/login')
     .send({
       username: userPayload.username,
@@ -23,5 +23,5 @@ export const createUser = async (app: INestApplication) => {
     })
     .expect(201);
 
-  return { user, token: user.body.access_token };
+  return { user, token: userRes.body.access_token };
 };

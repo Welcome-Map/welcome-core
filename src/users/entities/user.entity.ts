@@ -6,7 +6,6 @@ export class User extends BaseEntity {
     super();
     Object.assign(this, partial);
   }
-  id: string;
 
   username: string;
 

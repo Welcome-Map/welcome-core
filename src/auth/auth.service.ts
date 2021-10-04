@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { MailService } from '../mail/mail.service';
 import { UpdatepasswordDto } from './dto/updatepassword.dto';
 import { PrismaService } from '../prisma.service';
-import { User } from '.prisma/client';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -40,7 +40,7 @@ export class AuthService {
       passwordHash,
     });
     const verificationCode: string = uuidv4();
-    const account = await this.prisma.accountVerification.create({
+    await this.prisma.accountVerification.create({
       data: { code: verificationCode, user: { connect: { id: user.id } } },
     });
 
@@ -50,7 +50,7 @@ export class AuthService {
       verificationCode,
     });
 
-    return account;
+    return user;
   }
 
   async login(user: any) {

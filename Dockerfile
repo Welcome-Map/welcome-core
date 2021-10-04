@@ -1,4 +1,4 @@
-FROM node:14.17 As development
+FROM node:16.8 As development
 
 WORKDIR /usr/src/app
 
@@ -6,13 +6,13 @@ COPY package*.json ./
 COPY prisma ./prisma/
 
 RUN npm install --only=development
-RUN npx prisma generate 
+RUN npx prisma generate
 
 COPY . .
 
 RUN npm run build
 
-FROM node:16.1 as production
+FROM node:16.8 as production
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}

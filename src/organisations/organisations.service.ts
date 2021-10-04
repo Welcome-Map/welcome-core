@@ -1,21 +1,25 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
-import { Organisation, Prisma } from '.prisma/client';
+import { Prisma } from '.prisma/client';
 import { User } from '@prisma/client';
 import { Role } from './entities/orgsmemberships.entity';
 import { CaslOrgsAbilityFactory } from '../casl/casl-orgs-ability.factory';
 import { UpdateOrganisationDTO } from './dto/updateOrganisation.dto';
 import { Action } from '../casl/types';
+import { Organisation } from './entities/organisation.entity';
+import { OrganisationsRepository } from './organisations.repository';
 
 @Injectable()
 export class OrganisationsService {
   constructor(
-    private prisma: PrismaService,
     private caslAbilityFactory: CaslOrgsAbilityFactory,
+    private organisationsRepository: OrganisationsRepository,
   ) {}
 
   async findAll(take = 10, skip = 0) {
-    return this.prisma.organisation.findMany({ take, skip });
+    return this.organisationsRepository.findMany({
+      take,
+      skip,
+    });
   }
 
   async create(
@@ -54,10 +58,14 @@ export class OrganisationsService {
   }
 
   async findOne(where: Prisma.OrganisationWhereUniqueInput) {
-    return this.prisma.user.findUnique({
+    return this.prisma.organisation.findUnique({
       where,
       include: {
-        orgsMemberships: true,
+        orgsMemberships: {
+          include: {
+            user: true,
+          },
+        },
       },
     });
   }

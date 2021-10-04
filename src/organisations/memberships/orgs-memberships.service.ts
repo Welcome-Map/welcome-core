@@ -10,7 +10,7 @@ export class OrgsMembershipsService {
     private caslAbilityFactory: CaslOrgsAbilityFactory,
   ) {}
   create(payload: { id: string; userId: string; role: Role }) {
-    this.prisma.orgsMemberships.create({
+    return this.prisma.orgsMemberships.create({
       data: {
         userId: payload.userId,
         organisationId: payload.id,

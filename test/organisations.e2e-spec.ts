@@ -10,6 +10,7 @@ import { OrganisationsModule } from '../src/organisations/organisations.module';
 import * as request from 'supertest';
 import { createUser } from './helpers/createUser';
 import { nanoid } from 'nanoid';
+import { Role } from '@prisma/client';
 
 describe('Organisations (e2e)', () => {
   let app: INestApplication;
@@ -143,7 +144,7 @@ describe('Organisations (e2e)', () => {
   it('can add a user to an org', async () => {
     const { token } = await createUser(app);
 
-    const regularUser = await createUser(app);
+    const { user } = await createUser(app);
 
     const res = await request(app.getHttpServer())
       .post('/organisations')
@@ -155,7 +156,7 @@ describe('Organisations (e2e)', () => {
 
     await request(app.getHttpServer())
       .post(`/organisations/${org.id}/join`)
-      .send({ userId: regularUser.user.body.id })
+      .send({ userId: user.body.id, role: Role.USER })
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
 
@@ -164,8 +165,6 @@ describe('Organisations (e2e)', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(orgRes.body.users[1].userName).toEqual(
-      regularUser.user.body.username,
-    );
+    expect(orgRes.body.users[1].username).toEqual(user.body.username);
   });
 });

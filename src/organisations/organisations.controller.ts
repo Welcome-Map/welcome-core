@@ -48,6 +48,17 @@ export class OrganisationsController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return this.organisationsService.findOne({ id });
+    const org = await this.organisationsService.findOne({ id });
+
+    const { orgsMemberships, ...orgBaseAttributes } = org;
+    const users = orgsMemberships.reduce((usersRes, orgMembership) => {
+      const userAttrs = {
+        username: orgMembership.user.username,
+        role: orgMembership.role,
+      };
+      usersRes.push(userAttrs);
+      return usersRes;
+    }, []);
+    return { ...orgBaseAttributes, users };
   }
 }

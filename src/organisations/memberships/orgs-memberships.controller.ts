@@ -15,16 +15,17 @@ export class OrgsMembershipsController {
   constructor(private orgsMembershipsService: OrgsMembershipsService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Post(':orgId/join')
+  @Post(':id/join')
   async join(
     @Param('id') id: string,
     @Request() req,
     @Body() user: { userId: string; role: Role },
   ) {
-    return this.orgsMembershipsService.create({
+    const res = await this.orgsMembershipsService.create({
       id,
       userId: user.userId,
       role: user.role,
     });
+    return res;
   }
 }
