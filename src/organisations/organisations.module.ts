@@ -13,6 +13,7 @@ import { CaslModule } from '../casl/casl.module';
 import { OrgsMembershipsController } from './memberships/orgs-memberships.controller';
 import { OrgsMembershipsService } from './memberships/orgs-memberships.service';
 import { OrganisationsRepository } from './organisations.repository';
+import { OrgsMembershipsRepository } from './memberships/orgs-memberships.repository';
 
 @Module({
   imports: [UsersModule, CaslModule],
@@ -21,6 +22,7 @@ import { OrganisationsRepository } from './organisations.repository';
     OrgsMembershipsService,
     PrismaService,
     OrganisationsRepository,
+    OrgsMembershipsRepository,
   ],
   controllers: [OrganisationsController, OrgsMembershipsController],
 })

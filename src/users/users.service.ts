@@ -14,36 +14,30 @@ export class UsersService {
 
   async findAll(params?: { skip?: number; take?: number }): Promise<User[]> {
     const { skip, take } = params;
-    const users = await this.usersRepository.findAll({ skip, take });
-    return users.map((user) => new User(user));
+    return this.usersRepository.findAll({ skip, take });
   }
 
   async findOne(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
   ): Promise<User> {
-    const user = await this.usersRepository.findOne(userWhereUniqueInput);
-    return new User(user);
+    return await this.usersRepository.findOne(userWhereUniqueInput);
   }
 
   async findByUsername(username: string): Promise<User> {
-    const user = await this.usersRepository.findByUsername(username);
-    return new User(user);
+    return this.usersRepository.findByUsername(username);
   }
   async findByEmail(email: string): Promise<User> {
-    const user = await this.usersRepository.findByEmail(email);
-    return new User(user);
+    return this.usersRepository.findByEmail(email);
   }
 
   async update(params: {
     where: Prisma.UserWhereUniqueInput;
     data: Prisma.UserUpdateInput;
   }): Promise<User> {
-    const user = await this.usersRepository.update(params);
-    return new User(user);
+    return await this.usersRepository.update(params);
   }
 
   async delete(where: Prisma.UserWhereUniqueInput): Promise<User> {
-    const user = await this.usersRepository.delete(where);
-    return new User(user);
+    return this.usersRepository.delete(where);
   }
 }

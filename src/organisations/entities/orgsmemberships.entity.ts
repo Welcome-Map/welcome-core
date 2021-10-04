@@ -1,13 +1,9 @@
+import { Role } from '.prisma/client';
 import { BaseEntity } from '../../common/base.entity';
+import { User } from '../../users/entities/user.entity';
 
-export enum Role {
-  USER = 'USER',
-  MANAGER = 'MANAGER',
-  ADMIN = 'ADMIN',
-}
-
-export class OrrgsMemberships extends BaseEntity {
-  constructor(partial: Partial<OrrgsMemberships>) {
+export class OrgsMemberships extends BaseEntity {
+  constructor(partial: Partial<OrgsMemberships>) {
     super();
     Object.assign(this, partial);
   }
@@ -18,4 +14,6 @@ export class OrrgsMemberships extends BaseEntity {
   userId: string;
 
   organisationId: string;
+
+  user?: User;
 }

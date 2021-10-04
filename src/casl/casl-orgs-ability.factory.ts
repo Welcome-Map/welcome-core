@@ -9,8 +9,8 @@ import {
   PasswordReset,
   AccountVerification,
   OrgsMemberships,
+  Role,
 } from '@prisma/client';
-import { Role } from '../organisations/entities/orgsmemberships.entity';
 
 type AppAbility = PrismaAbility<
   [
