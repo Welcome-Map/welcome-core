@@ -23,7 +23,7 @@ jobs:
       - name: Login to SW Container Registry
         uses: docker/login-action@v1
         with:
-          registry: rg.fr-par.scw.cloud/welcome-map
+          registry: rg.fr-par.scw.cloud/wm-infra
           username: nologin
           password: ${{ secrets.SW_HUB_PW }}
       - name: Build and push
@@ -31,6 +31,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: rg.fr-par.scw.cloud/welcome-map/welcome-core:latest
+          tags: rg.fr-par.scw.cloud/wm-infra/welcome-core:latest
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
