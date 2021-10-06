@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build && npm run copy:emails",
+    "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "mailhog": "mailhog",
     "migrate": "prisma migrate deploy",
@@ -34,6 +34,7 @@
     "@casl/prisma": "^1.0.0",
     "@nestjs-modules/mailer": "^1.6.0",
     "@nestjs/bull": "^0.4.1",
+    "@nestjs/cli": "^8.1.2",
     "@nestjs/common": "^8.0.6",
     "@nestjs/config": "^1.0.1",
     "@nestjs/core": "^8.0.6",
@@ -57,6 +58,7 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.7.1",
+    "prisma": "^3.1.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.3.0",
@@ -65,7 +67,6 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@nestjs/cli": "^8.1.2",
     "@nestjs/schematics": "^8.0.3",
     "@nestjs/testing": "^8.0.6",
     "@types/bcrypt": "^5.0.0",
@@ -88,7 +89,6 @@
     "faker": "^5.5.3",
     "jest": "^27.1.0",
     "prettier": "^2.3.2",
-    "prisma": "^3.1.1",
     "supertest": "^6.1.6",
     "ts-jest": "^27.0.5",
     "ts-loader": "^9.2.5",
