@@ -17,16 +17,16 @@ jobs:
       - name: Run tests
         run: npm run test:e2e
 
-  # capdeploy:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Run migrations
-  #       env:
-  #         DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  #       run: npx prisma migrate deploy
-  #     - name: Deploy with caprover
-  #       run: npm i -g caprover && caprover deploy --appToken ${{ secrets.CAPROVER_TOKEN}} --caproverUrl https://captain.welcome-map.org -b main --appName api
+  capdeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npx prisma migrate deploy
+      - name: Deploy with caprover
+        run: npm i -g caprover && caprover deploy --appToken ${{ secrets.CAPROVER_TOKEN}} --caproverUrl https://captain.welcome-map.org -b main --appName api
 
   # buildpushdocker:
   #   runs-on: ubuntu-latest
