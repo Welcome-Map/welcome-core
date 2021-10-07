@@ -5,7 +5,6 @@ import { AuthModule } from './auth/auth.module';
 import { BullModule } from '@nestjs/bull';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import mg from 'nodemailer-mailgun-transport';
 import { MailModule } from './mail/mail.module';
 import { PrismaService } from './prisma.service';
 import { OrganisationsModule } from './organisations/organisations.module';
@@ -22,16 +21,7 @@ import { CaslModule } from './casl/casl.module';
     }),
     MailerModule.forRootAsync({
       useFactory: async () => ({
-        transport:
-          process.env.NODE_ENV !== 'production'
-            ? process.env.SMTP
-            : mg({
-                auth: {
-                  api_key: process.env.MAILGUN_KEY,
-                  domain: process.env.MAILGUN_DOMAIN,
-                },
-                host: 'api.eu.mailgun.net',
-              }),
+        transport: process.env.SMTP,
         defaults: {
           from: '"Woozir" <no-reply@woozir.app>',
         },

@@ -8,8 +8,6 @@ ENV NODE_ENV=${NODE_ENV}
 ARG DATABASE_URL=${DATABASE_URL}
 ARG SMTP=${SMTP}
 ARG JWT_SECRET=${JWT_SECRET}
-ARG MAILGUN_KEY=${MAILGUN_KEY}
-ARG MAILGUN_DOMAIN=${MAILGUN_DOMAIN}
 
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 COPY package*.json ./
